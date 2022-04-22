@@ -18,6 +18,24 @@ async function getAll(page = 1){
   }
 }
 
+async function getAllClasses() {
+    const rows = await db.query(
+      `SELECT * FROM CLASS`
+    );
+    const data = helper.emptyOrRows(rows);  
+
+    return data
+}
+
+async function getAllRaces() {
+    const rows = await db.query(
+      `SELECT * FROM RACE`
+    );
+    const data = helper.emptyOrRows(rows);  
+
+    return data
+}
+
 async function createCharacter(character){
     const result = await db.query(
       `INSERT INTO DDCHARACTER
@@ -69,7 +87,7 @@ async function createCharacter(character){
     let message = 'Error in deleting programming language';
   
     if (result.affectedRows) {
-      message = 'Programming language deleted successfully';
+      message = 'Character deleted successfully';
     }
   
     return {message};
@@ -80,5 +98,7 @@ module.exports = {
   getAll,
   createCharacter,
   update,
-  remove
+  remove,
+  getAllClasses,
+  getAllRaces
 }

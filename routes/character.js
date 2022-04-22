@@ -4,6 +4,27 @@ const express = require('express');
 const router = express.Router();
 const ddcharacters = require('../services/character');
 
+/* GET all dd character classes */
+router.get('/classes', async function(req, res, next) {
+  try {
+    res.json(await ddcharacters.getAllClasses(req.query.page));
+  } catch (err) {
+    console.error(`Error while getting ddcharacter classes `, err.message);
+    next(err);
+  }
+});
+
+/* GET all dd character races */
+/* GET all dd character classes */
+router.get('/races', async function(req, res, next) {
+  try {
+    res.json(await ddcharacters.getAllRaces(req.query.page));
+  } catch (err) {
+    console.error(`Error while getting ddcharacter races`, err.message);
+    next(err);
+  }
+});
+
 /* GET all dd characters. */
 router.get('/', async function(req, res, next) {
   try {
