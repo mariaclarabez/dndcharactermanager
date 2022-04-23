@@ -35,16 +35,10 @@ async function getAllRaces() {
 
     return data
 }
-
+/* call stored procedure create character */
 async function createCharacter(character){
-    const result = await db.query(
-      `INSERT INTO DDCHARACTER
-      (char_name, class_id, race_id, wisdom, charisma, strength, dexterity, intelligence, constitution) 
-      VALUES 
-      ("${character.char_name}", ${character.class_id}, ${character.race_id}, ${character.wisdom}, 
-        ${character.charisma}, ${character.strength}, ${character.dexterity}, ${character.intelligence},  
-        ${character.constitution})`
-    );
+    let query = `CALL create_character("${character.char_name}",${character.race_id},${character.class_id})`;
+    const result = await db.query(query);
   
     let message = 'Error in creating character';
   
