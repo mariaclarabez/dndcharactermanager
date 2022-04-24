@@ -4,10 +4,35 @@ const db = require('./db');
 const helper = require('../helper');
 const config = require('../config');
 
+async function postUser(user){
+  let query = `INSERT INTO USER (username, password) VALUES ("${user.username}","${user.password}")`;
+  const result = await db.query(query);
+  let message = 'Error in creating user';
+
+  if (result.affectedRows) {
+    message = 'User created successfully';
+  }
+
+  return {message};
+}
+
+async function getAllRegisteredUsers() {
+console.log('Getting registered users');
+const rows = await db.query(
+  `SELECT * FROM USER`
+);
+const data = helper.emptyOrRows(rows);  
+
+return data
+}
+
 async function getAll(page = 1){
   const offset = helper.getOffset(page, config.listPerPage);
   const rows = await db.query(
-    `SELECT * FROM DDCHARACTER LIMIT ${offset},${config.listPerPage}`
+    `SELECT DDCHARACTER.*, race_id, class_id, RACE.name AS race_name, 
+    CLASS.name AS class_name FROM DDCHARACTER 
+    JOIN RACE ON DDCHARACTER.race_id = RACE.id
+    JOIN CLASS ON DDCHARACTER.class_id = CLASS.id`
   );
   const data = helper.emptyOrRows(rows);
   const meta = {page};
@@ -16,6 +41,18 @@ async function getAll(page = 1){
     data,
     meta
   }
+}
+
+async function getAllSpells() {
+    const rows = await db.query(
+        `SELECT KNOWS_SPELL.*, SPELLS.name AS spell_name, 
+        CLASS.name AS class_name FROM KNOWS_SPELL JOIN SPELLS 
+        ON KNOWS_SPELL.spell_id = SPELLS.id
+        JOIN CLASS on KNOWS_SPELL.class_id = CLASS.id;`
+      );
+      const data = helper.emptyOrRows(rows);  
+  
+      return data
 }
 
 async function getAllClasses() {
@@ -94,5 +131,8 @@ module.exports = {
   update,
   remove,
   getAllClasses,
-  getAllRaces
+  getAllRaces,
+  getAllSpells,
+  postUser,
+  getAllRegisteredUsers
 }

@@ -4,6 +4,27 @@ const express = require('express');
 const router = express.Router();
 const ddcharacters = require('../services/character');
 
+
+router.get('/users', async function(req, res, next) {
+  try {
+    res.json(await ddcharacters.getAllRegisteredUsers(req.query.page));
+  } catch (err) {
+    console.error(`Error while getting users `, err.message);
+    next(err);
+  }
+});
+
+router.post('/users', async function(req, res, next) {
+  try {
+    console.log("hello post");
+    res.json(await ddcharacters.postUser(req.body));
+  } catch (err) {
+    console.error(`Error while creating user`, err.message);
+    next(err);
+  }
+});
+
+
 /* GET all dd character classes */
 router.get('/classes', async function(req, res, next) {
   try {
@@ -13,6 +34,17 @@ router.get('/classes', async function(req, res, next) {
     next(err);
   }
 });
+
+/* GET all dd spells */
+router.get('/spells', async function(req, res, next) {
+  try {
+    res.json(await ddcharacters.getAllSpells(req.query.page));
+  } catch (err) {
+    console.error(`Error while getting spells`, err.message);
+    next(err);
+  }
+});
+
 
 /* GET all dd character races */
 /* GET all dd character classes */
