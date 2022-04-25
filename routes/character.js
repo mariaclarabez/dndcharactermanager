@@ -7,14 +7,31 @@ const ddcharacters = require('../services/character');
 
 router.get('/users', async function(req, res, next) {
   try {
-    res.json(await ddcharacters.getAllRegisteredUsers(req.query.page));
+    res.json(await ddcharacters.getAllUsers(req.query.page));
   } catch (err) {
     console.error(`Error while getting users `, err.message);
     next(err);
   }
 });
 
-router.post('/users', async function(req, res, next) {
+
+/* For logging in */
+router.post('/login', async function(req, res, next) {
+  console.log("logging" + JSON.stringify(req.body));
+  try {
+    const result = await ddcharacters.loginUser(req.body);
+    console.log(result);
+    res.json(result);
+    
+  } catch (err) {
+    console.error(`Error while getting users `, err.message);
+    next(err);
+  }
+});
+
+/* For registering*/
+
+router.post('/register', async function(req, res, next) {
   try {
     console.log("hello post");
     res.json(await ddcharacters.postUser(req.body));

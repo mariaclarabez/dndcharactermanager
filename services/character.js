@@ -16,14 +16,33 @@ async function postUser(user){
   return {message};
 }
 
-async function getAllRegisteredUsers() {
-console.log('Getting registered users');
-const rows = await db.query(
-  `SELECT * FROM USER`
-);
-const data = helper.emptyOrRows(rows);  
+async function getAllUsers(page = 1){
+  const offset = helper.getOffset(page, config.listPerPage);
+  const rows = await db.query(
+    `SELECT * FROM USER`
+  );
+  const data = helper.emptyOrRows(rows);
+  const meta = {page};
 
-return data
+  return {
+    data,
+    meta
+  }
+}
+
+async function loginUser(user) {
+  const rows = await db.query(
+    `SELECT * FROM USER WHERE username = "${user.username}" AND password = "${user.password}"`
+  );
+  const data = helper.emptyOrRows(rows);  
+  if (data.length > 1) {
+    throw new Error("multiple user with the same username password combination"); 
+  } if (data.length == 1){
+    return data[0];
+  } 
+  return {error: "Incorrect name or password"};
+  
+
 }
 
 async function getAll(page = 1){
@@ -134,5 +153,6 @@ module.exports = {
   getAllRaces,
   getAllSpells,
   postUser,
-  getAllRegisteredUsers
+  loginUser, 
+  getAllUsers
 }
