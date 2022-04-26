@@ -5,9 +5,78 @@ const router = express.Router();
 const ddcharacters = require('../services/character');
 
 
+
+/* Create a campaign */
+router.post('/campaign', async function(req, res, next) {
+  try {
+    const result = await ddcharacters.createCampaign(req.body);
+    console.log(result);
+    res.json(result);
+    
+  } catch (err) {
+    console.error(`Error while creating campaign `, err.message);
+    next(err);
+  }
+
+})
+
+
+/* Get spells by class id */
+router.get('/spells/:id', async function(req, res, next) {
+  try {
+    res.json(await ddcharacters.getSpellByClass(req.params.id));
+  } catch (err) {
+    console.error(`Error while getting campaign `, err.message);
+    next(err);
+  }
+});
+
+router.get('/spellsForCharacter/:id', async function(req, res, next) {
+  try {
+    res.json(await ddcharacters.getSpellIdsKnownByCharacter(req.params.id));
+  } catch (err) {
+    console.error(`Error while getting campaign `, err.message);
+    next(err);
+  }
+});
+
+//add spell
+router.post('/spellsForCharacter', async function(req, res, next) {
+  try {
+    await ddcharacters.addSpellToCharacter(req.body);
+    res.status(200).send();
+  } catch (err) {
+    console.error(`Error while getting campaign `, err.message);
+    next(err);
+  }
+});
+
+//remove spell from character
+router.delete('/spellsForCharacter', async function(req, res, next) {
+  try {
+    await ddcharacters.removeSpellFromCharacter(req.body);
+    res.status(200).send();
+  } catch (err) {
+    console.error(`Error while getting campaign `, err.message);
+    next(err);
+  }
+});
+
+/* Get all campaigns */
+router.get('/campaign', async function(req, res, next) {
+  try {
+    res.json(await ddcharacters.getAllCampaigns(req.body));
+  } catch (err) {
+    console.error(`Error while getting campaign `, err.message);
+    next(err);
+  }
+});
+
+
+
 router.get('/users', async function(req, res, next) {
   try {
-    res.json(await ddcharacters.getAllUsers(req.query.page));
+    res.json(await ddcharacters.getAllUsers());
   } catch (err) {
     console.error(`Error while getting users `, err.message);
     next(err);
