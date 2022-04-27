@@ -152,7 +152,7 @@ async function createCharacter(character){
     const result = await db.query(
       `UPDATE DDCHARACTER 
       SET char_name="${character.char_name}", 
-      campaign_id = ${character.campaign_id},
+      campaign_id = ${character.campaign_id}
       WHERE id=${id}` 
     );
   
