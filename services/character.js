@@ -152,16 +152,7 @@ async function createCharacter(character){
     const result = await db.query(
       `UPDATE DDCHARACTER 
       SET char_name="${character.char_name}", 
-      class_id = ${character.class_id},
-      race_id = ${character.race_id},
       campaign_id = ${character.campaign_id},
-      owner_id = ${owner_id},
-      wisdom = ${character.wisdom},
-      charisma = ${character.charisma},
-      strength = ${character.strength},
-      dexterity = ${character.dexterity},
-      intelligence = ${character.intelligence},
-      constitution = ${character.constitution}
       WHERE id=${id}` 
     );
   
@@ -179,7 +170,7 @@ async function createCharacter(character){
       `DELETE FROM DDCHARACTER WHERE id=${id}`
     );
   
-    let message = 'Error in deleting programming language';
+    let message = 'Error in deleting character';
   
     if (result.affectedRows) {
       message = 'Character deleted successfully';

@@ -133,7 +133,6 @@ router.get('/spells', async function(req, res, next) {
 
 
 /* GET all dd character races */
-/* GET all dd character classes */
 router.get('/races', async function(req, res, next) {
   try {
     res.json(await ddcharacters.getAllRaces(req.query.page));
@@ -173,11 +172,13 @@ router.put('/:id', async function(req, res, next) {
     next(err);
   }
 });
+
+
  
-/* DELTE DDCHARACTER */
+/* DELETE DDCHARACTER */
 router.delete('/:id', async function(req, res, next) {
   try {
-    res.json(await ddcharacters.remove(req.params.id, req.body));
+    res.json(await ddcharacters.remove(req.params.id));
   } catch (err) {
     console.error(`Error while deleting character`, err.message);
     next(err);
